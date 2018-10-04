@@ -1,3 +1,4 @@
+require 'money'
 require 'ynab'
 require 'starling'
 require 'rest-client'
