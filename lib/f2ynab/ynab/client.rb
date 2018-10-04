@@ -66,7 +66,7 @@ module F2ynab
         Rails.logger.error('YNAB::Client.create_transaction failure')
         Rails.logger.error("YNAB::Client.create_transaction Response: #{e.response_body}")
         Rails.logger.error(e)
-        false
+        { error: e.message }
       end
 
       def create_transactions(transactions)
