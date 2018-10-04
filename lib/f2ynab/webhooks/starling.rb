@@ -1,7 +1,6 @@
 module F2ynab
   module Webhooks
     class Starling
-
       WEBHOOKS_TYPES = [
         'TRANSACTION_AUTH_DECLINED',
         'TRANSACTION_AUTH_PARTIAL_REVERSAL',
