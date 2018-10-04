@@ -13,6 +13,9 @@ require 'f2ynab/import/revolut_business'
 require 'f2ynab/import/starling'
 require 'f2ynab/import/teller'
 
+require 'f2ynab/webhooks/monzo'
+require 'f2ynab/webhooks/starling'
+
 require 'f2ynab/ynab/bulk_transaction_creator'
 require 'f2ynab/ynab/client'
 require 'f2ynab/ynab/import_id_creator'
