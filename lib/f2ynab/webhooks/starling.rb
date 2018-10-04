@@ -27,10 +27,11 @@ module F2ynab
         'INTEREST_CHARGE',
       ]
 
-      attr_accessor :webhook
+      attr_accessor :webhook, :ynab_account_id
 
-      def initialize(webhook)
+      def initialize(webhook, ynab_account_id)
         @webhook = webhook
+        @ynab_account_id = ynab_account_id
       end
 
       def import
@@ -54,7 +55,7 @@ module F2ynab
           description: description.strip,
           cleared: !foreign_transaction,
           flag: flag,
-          account_id: params[:ynab_account_id] || ENV['YNAB_STARLING_ACCOUNT_ID']
+          account_id: ynab_account_id || ENV['YNAB_STARLING_ACCOUNT_ID']
         ).create
       end
     end

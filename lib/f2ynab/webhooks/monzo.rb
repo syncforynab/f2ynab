@@ -1,10 +1,11 @@
 module F2ynab
   module Webhooks
     class Monzo
-      attr_accessor :webhook
+      attr_accessor :webhook, :ynab_account_id
 
-      def initialize(webhook)
+      def initialize(webhook, ynab_account_id: nil)
         @webhook = webhook
+        @ynab_account_id = ynab_account_id
       end
 
       def import
@@ -41,7 +42,7 @@ module F2ynab
         end
 
         # @todo remove the final fall back at some point. It will be a breaking change.
-        ynab_account_id = params[:ynab_account_id] || ENV['YNAB_MONZO_ACCOUNT_ID'] || ENV['YNAB_ACCOUNT_ID']
+        ynab_account_id = ynab_account_id || ENV['YNAB_MONZO_ACCOUNT_ID'] || ENV['YNAB_ACCOUNT_ID']
 
         ::F2ynab::YNAB::TransactionCreator.new(
           id: "M#{webhook[:data][:id]}",
