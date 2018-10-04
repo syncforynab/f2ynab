@@ -88,7 +88,7 @@ module F2ynab
 
         foreign_transaction = transaction[:local_currency] != transaction[:currency]
         if foreign_transaction
-          money = Money.new(transaction[:local_amount].abs, transaction[:local_currency])
+          money = ::Money.new(transaction[:local_amount].abs, transaction[:local_currency])
           description.prepend("(#{money.format}) ")
           flag = 'orange' unless ENV['SKIP_FOREIGN_CURRENCY_FLAG'].present?
         end
