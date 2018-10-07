@@ -1,11 +1,15 @@
 module F2ynab
   module Webhooks
     class Monzo
-      attr_accessor :webhook, :ynab_account_id
+      attr_accessor :webhook, :ynab_account_id, :skip_tags, :skip_foreign_currency_flag, :skip_emoji
 
-      def initialize(webhook, ynab_account_id)
+      def initialize(webhook, ynab_account_id, skip_tags: false, skip_foreign_currency_flag: false, skip_emoji: false)
         @webhook = webhook
         @ynab_account_id = ynab_account_id
+        
+        @skip_tags = skip_tags
+        @skip_foreign_currency_flag = skip_foreign_currency_flag
+        @skip_emoji = skip_emoji
       end
 
       def import
@@ -25,14 +29,14 @@ module F2ynab
         if foreign_transaction
           money = ::Money.new(webhook[:data][:local_amount].abs, webhook[:data][:local_currency])
           description.prepend("(#{money.format}) ")
-          flag = 'orange' unless ENV['SKIP_FOREIGN_CURRENCY_FLAG'].present?
+          flag = 'orange' unless skip_foreign_currency_flag
         end
 
-        unless ENV['SKIP_EMOJI'].present?
+        unless skip_emoji
           description.prepend("#{webhook[:data][:merchant][:emoji]} ") if webhook[:data][:merchant].try(:[], :emoji)
         end
 
-        unless ENV['SKIP_TAGS'].present?
+        unless skip_tags
           description << webhook[:data][:merchant][:metadata][:suggested_tags] if webhook[:data][:merchant].try(:[], :metadata).try(:[], :suggested_tags)
         end
 
