@@ -40,14 +40,14 @@ module F2ynab
         if foreign_transaction
           money = ::Money.new(transaction[:local_amount].abs, transaction[:local_currency])
           description.prepend("(#{money.format}) ")
-          flag = 'orange' unless skip_foreign_currency_flag.present?
+          flag = 'orange' unless @skip_foreign_currency_flag.present?
         end
 
-        unless skip_emoji
+        unless @skip_emoji
           description.prepend("#{transaction[:merchant][:emoji]} ") if transaction[:merchant].try(:[], :emoji)
         end
 
-        unless skip_tags
+        unless @skip_tags
           description << transaction[:merchant][:metadata][:suggested_tags] if transaction[:merchant].try(:[], :metadata).try(:[], :suggested_tags)
         end
 
