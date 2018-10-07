@@ -3,7 +3,7 @@ module F2ynab
     class Monzo
       attr_accessor :webhook, :ynab_account_id
 
-      def initialize(webhook, ynab_account_id: nil)
+      def initialize(webhook, ynab_account_id)
         @webhook = webhook
         @ynab_account_id = ynab_account_id
       end
@@ -40,9 +40,6 @@ module F2ynab
         if webhook[:data][:metadata].try(:[], :p2p_initiator) == 'payment-request' && webhook[:data][:merchant].present? && webhook[:data][:counterparty].present?
           description << " (Repayment to #{webhook[:data][:counterparty][:name]})"
         end
-
-        # @todo remove the final fall back at some point. It will be a breaking change.
-        ynab_account_id = ynab_account_id || ENV['YNAB_MONZO_ACCOUNT_ID'] || ENV['YNAB_ACCOUNT_ID']
 
         ::F2ynab::YNAB::TransactionCreator.new(
           id: "M#{webhook[:data][:id]}",
