@@ -32,6 +32,8 @@ module F2ynab
       def initialize(webhook, ynab_account_id)
         @webhook = webhook
         @ynab_account_id = ynab_account_id
+
+        @skip_foreign_currency_flag = skip_foreign_currency_flag
       end
 
       def import
@@ -43,7 +45,7 @@ module F2ynab
         flag = nil
 
         foreign_transaction = webhook[:content][:sourceCurrency] != 'GBP'
-        if foreign_transaction && !ENV['SKIP_FOREIGN_CURRENCY_FLAG']
+        if foreign_transaction && !@skip_foreign_currency_flag
           flag = 'orange'
         end
 
@@ -55,7 +57,7 @@ module F2ynab
           description: description.strip,
           cleared: !foreign_transaction,
           flag: flag,
-          account_id: ynab_account_id || ENV['YNAB_STARLING_ACCOUNT_ID']
+          account_id: ynab_account_id
         ).create
       end
     end
