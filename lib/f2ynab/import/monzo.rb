@@ -3,11 +3,15 @@ module F2ynab
     class Monzo
       BASE_URL = 'https://api.monzo.com'
 
-      def initialize(access_token, monzo_account_id, ynab_account_id, from: 1.year.ago)
+      def initialize(access_token, monzo_account_id, ynab_account_id, from: 1.year.ago, skip_tags: false, skip_foreign_currency_flag: false, skip_emoji: false)
         @access_token = access_token
         @monzo_account_id = monzo_account_id
         @ynab_account_id = ynab_account_id
         @from = from
+
+        @skip_tags = skip_tags
+        @skip_foreign_currency_flag = skip_foreign_currency_flag
+        @skip_emoji = skip_emoji
       end
 
       def import
@@ -36,14 +40,14 @@ module F2ynab
         if foreign_transaction
           money = ::Money.new(transaction[:local_amount].abs, transaction[:local_currency])
           description.prepend("(#{money.format}) ")
-          flag = 'orange' unless ENV['SKIP_FOREIGN_CURRENCY_FLAG'].present?
+          flag = 'orange' unless skip_foreign_currency_flag.present?
         end
 
-        unless ENV['SKIP_EMOJI'].present?
+        unless skip_emoji
           description.prepend("#{transaction[:merchant][:emoji]} ") if transaction[:merchant].try(:[], :emoji)
         end
 
-        unless ENV['SKIP_TAGS'].present?
+        unless skip_tags
           description << transaction[:merchant][:metadata][:suggested_tags] if transaction[:merchant].try(:[], :metadata).try(:[], :suggested_tags)
         end
 

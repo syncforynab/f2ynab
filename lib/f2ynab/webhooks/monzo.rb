@@ -6,7 +6,7 @@ module F2ynab
       def initialize(webhook, ynab_account_id, skip_tags: false, skip_foreign_currency_flag: false, skip_emoji: false)
         @webhook = webhook
         @ynab_account_id = ynab_account_id
-        
+
         @skip_tags = skip_tags
         @skip_foreign_currency_flag = skip_foreign_currency_flag
         @skip_emoji = skip_emoji
