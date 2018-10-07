@@ -17,60 +17,6 @@ module F2ynab
         end
 
         ::F2ynab::YNAB::BulkTransactionCreator.new(transactions_to_create, account_id: @ynab_account_id).create
-
-        # Lets fixup any transactions if possible
-        # @note this is very alpha, so i will keep it behind a feature flag for now
-        if ENV['MONZO_FIXUP'].present?
-          ynab_client = YNAB::Client.new(ENV['YNAB_ACCESS_TOKEN'], nil, @ynab_account_id)
-          ynab_transactions = ynab_client.transactions(since_date: @from, account_id: @ynab_account_id)
-
-          ynab_transactions_by_id = ynab_transactions.map{|t| [t.import_id, t] }.to_h
-          monzo_transactions_by_id = transactions.reject { |t| t[:decline_reason].present? || t[:amount] == 0 }.map{|t| ["M#{t[:id]}", t] }.to_h
-
-          ynab_transactions.each do |transaction|
-            monzo_transaction = monzo_transactions_by_id[transaction.import_id]
-            if monzo_transaction.present?
-
-              up_to_date_transaction = transaction_hash(monzo_transaction)
-              current_transaction = {
-                id: transaction.import_id,
-                amount: transaction.amount,
-                payee_name: transaction.payee_name,
-                date: transaction.date,
-                description: transaction.memo,
-                cleared: transaction.cleared.capitalize,
-              }
-
-              # If anything has changed, then lets update it.
-              if (current_transaction.except(:cleared) != up_to_date_transaction.except(:flag, :cleared)) || (monzo_transaction[:settled].present? && transaction.cleared == 'uncleared')
-                puts "#{transaction.import_id} NOT MATCH"
-                ap ({ updated: up_to_date_transaction.except(:flag), current: current_transaction })
-                puts 'Fixing...'
-
-                ynab_client.update_transaction(transaction.id, up_to_date_transaction)
-
-                puts 'done...'
-                puts ''
-              else
-                puts "#{transaction.import_id} OK"
-              end
-            else
-              puts "#{transaction.import_id} not found in Monzo"
-              ap transaction
-            end
-          end
-
-          monzo_transactions_by_id.each do |id, transaction|
-            ynab_transaction = ynab_transactions_by_id["M#{transaction[:id]}"]
-
-            if ynab_transaction.present?
-              puts "M#{transaction[:id]} OK"
-            else
-              puts "#{"M#{transaction[:id]}"} NOT FOUND IN YNAB"
-              ap transaction
-            end
-          end
-        end
       end
 
       private
