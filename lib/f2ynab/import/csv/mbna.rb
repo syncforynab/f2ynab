@@ -7,7 +7,7 @@ module F2ynab
   module Import
     module Csv
       class MBNA
-        def initialize(path, ynab_account_id = ENV['YNAB_MBNA_ACCOUNT_ID'])
+        def initialize(path, ynab_account_id)
           @path = path
           @ynab_account_id = ynab_account_id
           @import_id_creator = ::F2ynab::YNAB::ImportIdCreator.new
