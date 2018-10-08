@@ -27,30 +27,28 @@ module F2ynab
         'INTEREST_CHARGE',
       ]
 
-      attr_accessor :webhook, :ynab_account_id
-
-      def initialize(ynab_client, webhook)
-        @webhook = webhook
+      def initialize(ynab_client, webhook, skip_foreign_currency_flag: false)
+        @webhook = @webhook
         @ynab_client = ynab_client
         @skip_foreign_currency_flag = skip_foreign_currency_flag
       end
 
       def import
-        return { warning: :unsupported_type } unless webhook[:webhookType].in?(WEBHOOKS_TYPES)
+        return { warning: :unsupported_type } unless @webhook[:webhookType].in?(WEBHOOKS_TYPES)
 
-        payee_name = webhook[:content][:counterParty]
-        amount = (webhook[:content][:amount].to_f * 1000).to_i
-        description = webhook[:content][:forCustomer].to_s
+        payee_name = @webhook[:content][:counterParty]
+        amount = (@webhook[:content][:amount].to_f * 1000).to_i
+        description = @webhook[:content][:forCustomer].to_s
         flag = nil
 
-        foreign_transaction = webhook[:content][:sourceCurrency] != 'GBP'
+        foreign_transaction = @webhook[:content][:sourceCurrency] != 'GBP'
         if foreign_transaction && !@skip_foreign_currency_flag
           flag = 'orange'
         end
 
         ::F2ynab::YNAB::TransactionCreator.new(@ynab_client,
-          id: "S:#{webhook[:content][:transactionUid]}",
-          date: Time.parse(webhook[:timestamp]).to_date,
+          id: "S:#{@webhook[:content][:transactionUid]}",
+          date: Time.parse(@webhook[:timestamp]).to_date,
           amount: amount,
           payee_name: payee_name,
           description: description.strip,
