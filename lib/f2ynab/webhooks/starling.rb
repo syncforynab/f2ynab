@@ -28,7 +28,7 @@ module F2ynab
       ]
 
       def initialize(ynab_client, webhook, skip_foreign_currency_flag: false)
-        @webhook = @webhook
+        @webhook = webhook
         @ynab_client = ynab_client
         @skip_foreign_currency_flag = skip_foreign_currency_flag
       end

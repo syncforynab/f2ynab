@@ -3,7 +3,7 @@ module F2ynab
     class Monzo
       def initialize(ynab_client, webhook, skip_tags: false, skip_foreign_currency_flag: false, skip_emoji: false)
         @ynab_client = ynab_client
-
+        @webhook = webhook
         @skip_tags = skip_tags
         @skip_foreign_currency_flag = skip_foreign_currency_flag
         @skip_emoji = skip_emoji
