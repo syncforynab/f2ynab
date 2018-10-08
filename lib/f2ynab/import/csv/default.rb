@@ -14,9 +14,9 @@ module F2ynab
           'amex'      => '::F2ynab::Import::Csv::Amex',
         }
 
-        def initialize(path, ynab_account_id)
+        def initialize(ynab_client, path)
           @path = path
-          @ynab_account_id = ynab_account_id
+          @ynab_client = ynab_client
           @import_id_creator = ::F2ynab::YNAB::ImportIdCreator.new
         end
 
@@ -36,7 +36,7 @@ module F2ynab
             }
           end
 
-          ::F2ynab::YNAB::BulkTransactionCreator.new(transactions_to_create, account_id: @ynab_account_id).create
+          ::F2ynab::YNAB::BulkTransactionCreator.new(@ynab_client, transactions_to_create).create
         end
       end
     end

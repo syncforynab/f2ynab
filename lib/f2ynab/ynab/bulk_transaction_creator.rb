@@ -3,9 +3,9 @@ module F2ynab
     class BulkTransactionCreator
       BATCH_SIZE = 20.freeze
 
-      def initialize(transactions, budget_id: nil, account_id: nil)
+      def initialize(client, transactions)
         @transactions = transactions
-        @client = ::F2ynab::YNAB::Client.new(ENV['YNAB_ACCESS_TOKEN'], budget_id, account_id)
+        @client = client
       end
 
       def create

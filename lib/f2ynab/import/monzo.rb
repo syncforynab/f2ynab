@@ -3,10 +3,10 @@ module F2ynab
     class Monzo
       BASE_URL = 'https://api.monzo.com'
 
-      def initialize(access_token, monzo_account_id, ynab_account_id, from: 1.year.ago, skip_tags: false, skip_foreign_currency_flag: false, skip_emoji: false)
+      def initialize(ynab_client, access_token, monzo_account_id, from: 1.year.ago, skip_tags: false, skip_foreign_currency_flag: false, skip_emoji: false)
         @access_token = access_token
         @monzo_account_id = monzo_account_id
-        @ynab_account_id = ynab_account_id
+        @ynab_client = ynab_client
         @from = from
 
         @skip_tags = skip_tags
@@ -20,7 +20,7 @@ module F2ynab
           transactions_to_create << transaction_hash(transaction)
         end
 
-        ::F2ynab::YNAB::BulkTransactionCreator.new(transactions_to_create, account_id: @ynab_account_id).create
+        ::F2ynab::YNAB::BulkTransactionCreator.new(@ynab_client, transactions_to_create).create
       end
 
       private

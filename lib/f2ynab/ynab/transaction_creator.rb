@@ -1,7 +1,7 @@
 module F2ynab
   module YNAB
     class TransactionCreator
-      def initialize(id: nil, date: nil, amount: nil, payee_name: nil, description: true, flag: nil, cleared: true, budget_id: nil, account_id: nil)
+      def initialize(client, id: nil, date: nil, amount: nil, payee_name: nil, description: true, flag: nil, cleared: true)
         @id = id
         @date = date
         @amount = amount
@@ -9,7 +9,7 @@ module F2ynab
         @description = description
         @cleared = cleared
         @flag = flag
-        @client = ::F2ynab::YNAB::Client.new(ENV['YNAB_ACCESS_TOKEN'], budget_id, account_id)
+        @client = client
       end
 
       def create

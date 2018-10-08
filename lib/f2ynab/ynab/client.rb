@@ -1,9 +1,9 @@
 module F2ynab
   module YNAB
     class Client
-      def initialize(access_token, budget_id = nil, account_id = nil)
+      def initialize(access_token, budget_id, account_id)
         @access_token = access_token
-        @budget_id = budget_id || ENV['YNAB_BUDGET_ID']
+        @budget_id = budget_id
         @account_id = account_id
       end
 

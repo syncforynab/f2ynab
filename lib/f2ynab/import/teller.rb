@@ -3,10 +3,10 @@ module F2ynab
     class Teller
       BASE_URL = "https://api.teller.io"
 
-      def initialize(access_token, teller_account_id, ynab_account_id)
+      def initialize(ynab_client, access_token, teller_account_id)
         @access_token = access_token
         @teller_account_id = teller_account_id
-        @ynab_account_id = ynab_account_id
+        @ynab_client = ynab_client
       end
 
       def import
@@ -21,7 +21,7 @@ module F2ynab
           }
         end
 
-        ::F2ynab::YNAB::BulkTransactionCreator.new(transactions_to_create, account_id: @ynab_account_id).create
+        ::F2ynab::YNAB::BulkTransactionCreator.new(@ynab_client, transactions_to_create).create
       end
 
       def transactions

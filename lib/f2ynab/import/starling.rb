@@ -1,9 +1,9 @@
 module F2ynab
   module Import
     class Starling
-      def initialize(access_token, ynab_account_id, from: nil)
+      def initialize(ynab_client, access_token, from: nil)
         @starling = ::Starling::Client.new(access_token: access_token)
-        @ynab_account_id = ynab_account_id
+        @ynab_client = ynab_client
         @from = from
       end
 
@@ -19,7 +19,7 @@ module F2ynab
           }
         end
 
-        ::F2ynab::YNAB::BulkTransactionCreator.new(transactions_to_create, account_id: @ynab_account_id).create
+        ::F2ynab::YNAB::BulkTransactionCreator.new(@ynab_client, transactions_to_create).create
       end
     end
   end

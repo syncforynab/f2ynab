@@ -4,8 +4,8 @@ module F2ynab
 
       BASE_URL = "https://b2b.revolut.com/api/1.0"
 
-      def initialize(access_token, ynab_account_id, from: nil)
-        @ynab_account_id = ynab_account_id
+      def initialize(ynab_client, access_token, from: nil)
+        @ynab_client = ynab_client
         @from = from
         @access_token = access_token
       end
@@ -21,7 +21,7 @@ module F2ynab
           }
         end
 
-        ::F2ynab::YNAB::BulkTransactionCreator.new(transactions_to_create, account_id: @ynab_account_id).create
+        ::F2ynab::YNAB::BulkTransactionCreator.new(@ynab_client, transactions_to_create).create
       end
 
       private

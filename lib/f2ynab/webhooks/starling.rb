@@ -29,10 +29,9 @@ module F2ynab
 
       attr_accessor :webhook, :ynab_account_id
 
-      def initialize(webhook, ynab_account_id)
+      def initialize(ynab_client, webhook)
         @webhook = webhook
-        @ynab_account_id = ynab_account_id
-
+        @ynab_client = ynab_client
         @skip_foreign_currency_flag = skip_foreign_currency_flag
       end
 
@@ -49,15 +48,14 @@ module F2ynab
           flag = 'orange'
         end
 
-        ::F2ynab::YNAB::TransactionCreator.new(
+        ::F2ynab::YNAB::TransactionCreator.new(@ynab_client,
           id: "S:#{webhook[:content][:transactionUid]}",
           date: Time.parse(webhook[:timestamp]).to_date,
           amount: amount,
           payee_name: payee_name,
           description: description.strip,
           cleared: !foreign_transaction,
-          flag: flag,
-          account_id: ynab_account_id
+          flag: flag
         ).create
       end
     end
