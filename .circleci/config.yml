@@ -15,7 +15,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          - v1-dependencies-{{ checksum "f2ynab.gemspec" }}
 
       - run:
           name: install dependencies
@@ -25,10 +25,10 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v1-dependencies-{{ checksum "f2ynab.gemspec" }}
 
-      # run tests!
+      # TODO: run tests
       - run:
           name: run tests
           command: |
-            bundle exec rake
+            bundle version
