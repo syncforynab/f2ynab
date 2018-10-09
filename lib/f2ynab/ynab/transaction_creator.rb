@@ -20,7 +20,7 @@ module F2ynab
           cleared: @cleared,
           date: @date.to_date,
           memo: @description,
-          flag: @flag
+          flag: @flag,
         )
 
         create.try(:id).present? ? create : { error: :failed, data: create }

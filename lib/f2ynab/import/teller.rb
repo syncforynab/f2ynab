@@ -17,7 +17,7 @@ module F2ynab
             amount: (transaction[:amount].to_f * 1000).to_i,
             payee_name: transaction[:counterparty],
             date: Date.parse(transaction[:date]),
-            description: transaction[:description]
+            description: transaction[:description],
           }
         end
 
@@ -35,7 +35,7 @@ module F2ynab
       private
 
       def get(url)
-        parse_response(::RestClient.get(BASE_URL + url, { 'Authorization' => "Bearer #{@access_token}" }))
+        parse_response(::RestClient.get(BASE_URL + url, 'Authorization' => "Bearer #{@access_token}"))
       end
 
       def parse_response(response)

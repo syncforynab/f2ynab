@@ -1,7 +1,6 @@
 module F2ynab
   module Import
     class RevolutBusiness
-
       BASE_URL = "https://b2b.revolut.com/api/1.0"
 
       def initialize(ynab_client, access_token, from: nil)
@@ -37,7 +36,7 @@ module F2ynab
       end
 
       def get(url)
-        parse_response(RestClient.get(BASE_URL + url, { 'Authorization' => "Bearer #{@access_token}" }))
+        parse_response(RestClient.get(BASE_URL + url, 'Authorization' => "Bearer #{@access_token}"))
       end
 
       def parse_response(response)

@@ -25,7 +25,7 @@ module F2ynab
               amount: amount,
               payee_name: transaction[2],
               date: date,
-              description: transaction[2]
+              description: transaction[2],
             }
           end
 

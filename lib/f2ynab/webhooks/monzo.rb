@@ -11,7 +11,7 @@ module F2ynab
 
       def import
         return { warning: :unsupported_type } unless @webhook[:type] == 'transaction.created'
-        return { warning: :zero_value } if @webhook[:data][:amount] == 0
+        return { warning: :zero_value } if @webhook[:data][:amount].zero?
         return { warning: :declined } if @webhook[:data][:decline_reason].present?
 
         payee_name = @webhook[:data][:merchant].try(:[], :name)
@@ -42,7 +42,8 @@ module F2ynab
           description << " (Repayment to #{@webhook[:data][:counterparty][:name]})"
         end
 
-        ::F2ynab::YNAB::TransactionCreator.new(@ynab_client,
+        ::F2ynab::YNAB::TransactionCreator.new(
+          @ynab_client,
           id: "M#{@webhook[:data][:id]}",
           date: Time.parse(@webhook[:data][:created]).to_date,
           amount: @webhook[:data][:amount] * 10,

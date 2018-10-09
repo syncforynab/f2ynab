@@ -16,7 +16,7 @@ module F2ynab
 
       def import
         transactions_to_create = []
-        transactions.reject { |t| t[:decline_reason].present? || t[:amount] == 0 }.each do |transaction|
+        transactions.reject { |t| t[:decline_reason].present? || t[:amount].zero? }.each do |transaction|
           transactions_to_create << transaction_hash(transaction)
         end
 
@@ -30,6 +30,7 @@ module F2ynab
         payee_name ||= transaction[:counterparty][:name] if transaction[:counterparty].present?
         payee_name ||= 'Topup' if transaction[:is_load]
         payee_name ||= transaction[:description]
+        payee_name
       end
 
       def description_and_flag(transaction)
@@ -64,7 +65,7 @@ module F2ynab
           date: Time.parse(transaction[:created]).to_date,
           description: description,
           cleared: transaction[:settled].present? ? 'Cleared' : 'Uncleared',
-          flag: flag
+          flag: flag,
         }
       end
 
@@ -74,7 +75,7 @@ module F2ynab
       end
 
       def get(url)
-        parse_response(RestClient.get(BASE_URL + url, { 'Authorization' => "Bearer #{@access_token}" }))
+        parse_response(RestClient.get(BASE_URL + url, 'Authorization' => "Bearer #{@access_token}"))
       end
 
       def parse_response(response)

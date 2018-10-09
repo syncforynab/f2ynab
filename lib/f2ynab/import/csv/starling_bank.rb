@@ -28,7 +28,7 @@ module F2ynab
               amount: amount,
               payee_name: transaction['Counter Party'],
               date: date,
-              description: transaction['Reference']
+              description: transaction['Reference'],
             }
           end
 

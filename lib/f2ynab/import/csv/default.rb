@@ -32,7 +32,7 @@ module F2ynab
               id: @import_id_creator.import_id(amount, date),
               amount: amount,
               payee_name: transaction[:description],
-              date: date
+              date: date,
             }
           end
 

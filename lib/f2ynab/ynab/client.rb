@@ -28,7 +28,9 @@ module F2ynab
       end
 
       def update_transaction(transaction_id, transaction)
-        client.transactions.update_transaction(selected_budget_id, transaction_id, {
+        client.transactions.update_transaction(
+          selected_budget_id,
+          transaction_id,
           transaction: {
             account_id: selected_account_id,
             date: transaction[:date].to_s,
@@ -38,10 +40,10 @@ module F2ynab
             cleared: transaction[:cleared] ? "Cleared" : 'Uncleared',
             memo: transaction[:description],
             flag_color: transaction[:flag],
-            import_id: transaction[:id]
-          }
-        }).data.transaction
-      rescue => e
+            import_id: transaction[:id],
+          },
+        ).data.transaction
+      rescue StandardError => e
         Rails.logger.error('YNAB::Client.update_transaction failure')
         Rails.logger.error("YNAB::Client.update_transaction Response: #{e.response_body}")
         Rails.logger.error(e)
@@ -49,7 +51,8 @@ module F2ynab
       end
 
       def create_transaction(id: nil, payee_id: nil, payee_name: nil, amount: nil, cleared: nil, date: nil, memo: nil, flag: nil)
-        client.transactions.create_transaction(selected_budget_id, {
+        client.transactions.create_transaction(
+          selected_budget_id,
           transaction: {
             account_id: selected_account_id,
             date: date.to_s,
@@ -59,10 +62,10 @@ module F2ynab
             cleared: cleared ? "Cleared" : 'Uncleared',
             memo: memo,
             flag_color: flag,
-            import_id: id
-          }
-        }).data.transaction
-      rescue => e
+            import_id: id,
+          },
+        ).data.transaction
+      rescue StandardError => e
         Rails.logger.error('YNAB::Client.create_transaction failure')
         Rails.logger.error("YNAB::Client.create_transaction Response: #{e.response_body}")
         Rails.logger.error(e)
@@ -70,8 +73,8 @@ module F2ynab
       end
 
       def create_transactions(transactions)
-        client.transactions.bulk_create_transactions(selected_budget_id, { transactions: transactions }).data.bulk
-      rescue => e
+        client.transactions.bulk_create_transactions(selected_budget_id, transactions: transactions).data.bulk
+      rescue StandardError => e
         Rails.logger.error('YNAB::Client.create_transactions failure')
         Rails.logger.error("YNAB::Client.create_transactions Request Body: #{transactions}")
         Rails.logger.error("YNAB::Client.create_transactions Response: #{e.response_body}")
@@ -90,7 +93,7 @@ module F2ynab
       protected
 
       def client
-        @client ||= ::YnabApi::Client.new(@access_token)
+        @_client ||= ::YnabApi::Client.new(@access_token)
       end
     end
   end
