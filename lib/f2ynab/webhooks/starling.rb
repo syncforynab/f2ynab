@@ -1,30 +1,30 @@
 module F2ynab
   module Webhooks
     class Starling
-      WEBHOOKS_TYPES = [
-        'TRANSACTION_AUTH_DECLINED',
-        'TRANSACTION_AUTH_PARTIAL_REVERSAL',
-        'TRANSACTION_AUTH_FULL_REVERSAL',
-        'TRANSACTION_CARD',
-        'TRANSACTION_CASH_WITHDRAWAL',
-        'TRANSACTION_DECLINED_INSUFFICIENT_FUNDS',
-        'TRANSACTION_DIRECT_CREDIT',
-        'TRANSACTION_DIRECT_DEBIT',
-        'TRANSACTION_DIRECT_DEBIT_INSUFFICIENT_FUNDS',
-        'TRANSACTION_DIRECT_DEBIT_DISPUTE',
-        'TRANSACTION_DECLINED_INSUFFICIENT_FUNDS',
-        'TRANSACTION_FASTER_PAYMENT_IN',
-        'TRANSACTION_FASTER_PAYMENT_OUT',
-        'TRANSACTION_FASTER_PAYMENT_REVERSAL',
-        'TRANSACTION_INTEREST_PAYMENT',
-        'TRANSACTION_INTERNAL_TRANSFER',
-        'TRANSACTION_INTEREST_WAIVED_DEPOSIT',
-        'TRANSACTION_NOSTRO_DEPOSIT',
-        'TRANSACTION_MOBILE_WALLET',
-        'SCHEDULED_PAYMENT_CANCELLED',
-        'SCHEDULED_PAYMENT_INSUFFICIENT_FUNDS',
-        'TRANSACTION_STRIPE_FUNDING',
-        'INTEREST_CHARGE',
+      WEBHOOKS_TYPES = %w[
+        TRANSACTION_AUTH_DECLINED
+        TRANSACTION_AUTH_PARTIAL_REVERSAL
+        TRANSACTION_AUTH_FULL_REVERSAL
+        TRANSACTION_CARD
+        TRANSACTION_CASH_WITHDRAWAL
+        TRANSACTION_DECLINED_INSUFFICIENT_FUNDS
+        TRANSACTION_DIRECT_CREDIT
+        TRANSACTION_DIRECT_DEBIT
+        TRANSACTION_DIRECT_DEBIT_INSUFFICIENT_FUNDS
+        TRANSACTION_DIRECT_DEBIT_DISPUTE
+        TRANSACTION_DECLINED_INSUFFICIENT_FUNDS
+        TRANSACTION_FASTER_PAYMENT_IN
+        TRANSACTION_FASTER_PAYMENT_OUT
+        TRANSACTION_FASTER_PAYMENT_REVERSAL
+        TRANSACTION_INTEREST_PAYMENT
+        TRANSACTION_INTERNAL_TRANSFER
+        TRANSACTION_INTEREST_WAIVED_DEPOSIT
+        TRANSACTION_NOSTRO_DEPOSIT
+        TRANSACTION_MOBILE_WALLET
+        SCHEDULED_PAYMENT_CANCELLED
+        SCHEDULED_PAYMENT_INSUFFICIENT_FUNDS
+        TRANSACTION_STRIPE_FUNDING
+        INTEREST_CHARGE
       ]
 
       def initialize(ynab_client, webhook, skip_foreign_currency_flag: false)
@@ -46,14 +46,15 @@ module F2ynab
           flag = 'orange'
         end
 
-        ::F2ynab::YNAB::TransactionCreator.new(@ynab_client,
+        ::F2ynab::YNAB::TransactionCreator.new(
+          @ynab_client,
           id: "S:#{@webhook[:content][:transactionUid]}",
           date: Time.parse(@webhook[:timestamp]).to_date,
           amount: amount,
           payee_name: payee_name,
           description: description.strip,
           cleared: !foreign_transaction,
-          flag: flag
+          flag: flag,
         ).create
       end
     end

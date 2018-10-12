@@ -2,7 +2,7 @@ module F2ynab
   module YNAB
     class ImportIdCreator
       def initialize
-        @occurence = Hash.new
+        @occurence = {}
       end
 
       def import_id(amount, date)

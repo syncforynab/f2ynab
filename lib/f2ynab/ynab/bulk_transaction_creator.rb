@@ -1,7 +1,7 @@
 module F2ynab
   module YNAB
     class BulkTransactionCreator
-      BATCH_SIZE = 20.freeze
+      BATCH_SIZE = 20
 
       def initialize(client, transactions)
         @transactions = transactions
@@ -9,13 +9,12 @@ module F2ynab
       end
 
       def create
-        if @transactions.size == 0
+        if @transactions.size.zero?
           Rails.logger.info(:no_transactions_to_create)
           return false
         end
 
         batches = (@transactions.size.to_f / BATCH_SIZE).ceil
-        per_batch = @transactions.size / batches
 
         Rails.logger.info("Splitting #{@transactions.size} transactions into #{batches} batches")
 
@@ -31,8 +30,8 @@ module F2ynab
               amount: transaction[:amount],
               memo: transaction[:description],
               date: transaction[:date].to_date,
-              cleared: !!transaction[:cleared] ? 'Cleared' : 'Uncleared',
-              flag: transaction[:flag]
+              cleared: transaction[:cleared] ? 'Cleared' : 'Uncleared',
+              flag: transaction[:flag],
             }
           end
 

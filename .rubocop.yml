@@ -1,0 +1,60 @@
+AllCops:
+  DisplayCopNames: true
+  Exclude:
+    - 'Gemfile'
+    - 'Gemfile.lock'
+    - '*.gemspec'
+    - '**/*_test.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: required
+
+# TODO: Current import interface uses named hash keys
+Metrics/ParameterLists:
+  Max: 8
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+# TODO: We should really be lowering the complexity overall
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
