@@ -63,7 +63,7 @@ module F2ynab
           payee_name: payee_name(transaction),
           date: Time.parse(transaction[:created]).to_date,
           description: description,
-          cleared: transaction[:settled].present? ? 'Cleared' : 'Uncleared',
+          cleared: transaction[:settled].present?,
           flag: flag
         }
       end
