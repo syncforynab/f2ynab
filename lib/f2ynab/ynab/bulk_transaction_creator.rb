@@ -1,7 +1,7 @@
 module F2ynab
   module YNAB
     class BulkTransactionCreator
-      BATCH_SIZE = 20
+      BATCH_SIZE = 100
 
       def initialize(client, transactions)
         @transactions = transactions
