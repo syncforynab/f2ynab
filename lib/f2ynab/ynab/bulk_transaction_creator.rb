@@ -14,6 +14,7 @@ module F2ynab
           return false
         end
 
+        created_transactions_ids = []
         batches = (@transactions.size.to_f / BATCH_SIZE).ceil
 
         Rails.logger.info("Splitting #{@transactions.size} transactions into #{batches} batches")
@@ -36,13 +37,15 @@ module F2ynab
           end
 
           if transactions_to_create.any?
-            created_transactions = @client.create_transactions(transactions_to_create)
-            Rails.logger.info(created_transactions)
-            created_transactions
+            create_transactions = @client.create_transactions(transactions_to_create)
+            Rails.logger.info(create_transactions)
+            created_transactions_ids.merge!(create_transactions.transaction_ids)
           else
             Rails.logger.info(:no_transactions_to_create)
           end
         end
+        
+        created_transactions_ids
       end
     end
   end
