@@ -36,7 +36,9 @@ module F2ynab
           end
 
           if transactions_to_create.any?
-            Rails.logger.info(@client.create_transactions(transactions_to_create))
+            created_transactions = @client.create_transactions(transactions_to_create)
+            Rails.logger.info(created_transactions)
+            created_transactions
           else
             Rails.logger.info(:no_transactions_to_create)
           end
