@@ -79,7 +79,7 @@ module F2ynab
         Rails.logger.error("YNAB::Client.create_transactions Request Body: #{transactions}")
         Rails.logger.error("YNAB::Client.create_transactions Response: #{e.response_body}")
         Rails.logger.error(e)
-        false
+        raise
       end
 
       def selected_budget_id
