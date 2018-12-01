@@ -38,6 +38,10 @@ module F2ynab
 
         payee_name = @webhook[:content][:counterParty]
         amount = (@webhook[:content][:amount].to_f * 1000).to_i
+
+        # Direct Debits need to be swapped to negative
+        amount *= -1 if amount.positive? && @webhook[:webhookType] == 'TRANSACTION_DIRECT_DEBIT'
+
         description = @webhook[:content][:forCustomer].to_s
         flag = nil
 
