@@ -8,7 +8,7 @@ module F2ynab
     module Csv
       class Default
         FORMATS = {
-          'default'   => '::F2ynab::Import::Csv',
+          'default'   => '::F2ynab::Import::Csv::Default',
           'starling'  => '::F2ynab::Import::Csv::StarlingBank',
           'mbna'      => '::F2ynab::Import::Csv::MBNA',
           'amex'      => '::F2ynab::Import::Csv::Amex',
