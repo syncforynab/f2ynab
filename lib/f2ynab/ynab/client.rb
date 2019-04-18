@@ -27,29 +27,6 @@ module F2ynab
         end
       end
 
-      def update_transaction(transaction_id, transaction)
-        client.transactions.update_transaction(
-          selected_budget_id,
-          transaction_id,
-          transaction: {
-            account_id: selected_account_id,
-            date: transaction[:date].to_s,
-            amount: transaction[:amount],
-            payee_id: transaction[:payee_id],
-            payee_name: transaction[:payee_name],
-            cleared: transaction[:cleared] ? "Cleared" : 'Uncleared',
-            memo: transaction[:description],
-            flag_color: transaction[:flag],
-            import_id: transaction[:id],
-          },
-        ).data.transaction
-      rescue StandardError => e
-        Rails.logger.error('YNAB::Client.update_transaction failure')
-        Rails.logger.error("YNAB::Client.update_transaction Response: #{e.response_body}")
-        Rails.logger.error(e)
-        false
-      end
-
       def create_transaction(id: nil, payee_id: nil, payee_name: nil, amount: nil, cleared: nil, date: nil, memo: nil, flag: nil)
         client.transactions.create_transaction(
           selected_budget_id,
