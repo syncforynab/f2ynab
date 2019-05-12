@@ -11,7 +11,7 @@ module F2ynab
 
       def import
         return { warning: :unsupported_type } unless @webhook[:type] == 'transaction.created'
-        return { warning: :zero_value } if @webhook[:data][:amount].zero?
+        return { warning: :zero_value } if @webhook[:data][:amount].to_i.zero?
         return { warning: :declined } if @webhook[:data][:decline_reason].present?
 
         payee_name = @webhook[:data][:merchant].try(:[], :name)
