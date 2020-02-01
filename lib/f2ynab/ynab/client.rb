@@ -46,6 +46,7 @@ module F2ynab
         Rails.logger.error('YNAB::Client.create_transaction failure')
         Rails.logger.error("YNAB::Client.create_transaction Response: #{e.response_body}")
         Rails.logger.error(e)
+        Raven.capture_exception(e) if defined?(Raven)
         { error: e.message }
       end
 
@@ -56,6 +57,7 @@ module F2ynab
         Rails.logger.error("YNAB::Client.create_transactions Request Body: #{transactions}")
         Rails.logger.error("YNAB::Client.create_transactions Response: #{e.response_body}")
         Rails.logger.error(e)
+        Raven.capture_exception(e) if defined?(Raven)
         raise
       end
 
