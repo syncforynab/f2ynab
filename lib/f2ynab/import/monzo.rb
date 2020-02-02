@@ -57,12 +57,17 @@ module F2ynab
 
       def transaction_hash(transaction)
         description, flag = description_and_flag(transaction)
+        timestamp = Time.parse(transaction[:created])
+        id = transaction[:id]
+
+        # We used to prepend "m" to monzo transactions. Keep doing that for now to stop any duplicates.
+        id.prepend('M') if timestamp < Time.at(1580652776)
 
         {
-          id: "M#{transaction[:id]}",
+          id: id,
           amount: transaction[:amount] * 10,
           payee_name: payee_name(transaction),
-          date: Time.parse(transaction[:created]).to_date,
+          date: timestamp.to_date,
           description: description,
           cleared: transaction[:settled].present?,
           flag: flag,
