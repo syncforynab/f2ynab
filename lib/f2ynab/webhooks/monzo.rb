@@ -44,7 +44,7 @@ module F2ynab
 
         ::F2ynab::YNAB::TransactionCreator.new(
           @ynab_client,
-          id: "M#{@webhook[:data][:id]}",
+          id: @webhook[:data][:id],
           date: Time.parse(@webhook[:data][:created]).to_date,
           amount: @webhook[:data][:amount] * 10,
           payee_name: payee_name,
