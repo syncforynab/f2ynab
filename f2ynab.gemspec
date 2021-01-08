@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "rubygems.pkg.github.com"
+    spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/syncforynab"
   else
     raise "RubyGems 2.0 or newer is required to protect against " "public gem pushes."
   end
